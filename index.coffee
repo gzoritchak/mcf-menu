@@ -12,6 +12,8 @@ class MenuBuilder
     @sousMenus.push child
     child
 
+
+
   breadCrumb: (url)->
     'Accueil / Santé / CMU ou Lamal'
 
