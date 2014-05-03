@@ -3,15 +3,23 @@ class MenuItem
     @sousMenus = []
 
 
+
 class MenuBuilder
   constructor: ->
     @sousMenus = []
 
-  menu: (title) ->
-    child = new Menu(title, @)
+  @m: (title, url, sms) ->
+    menu = new Menu(title, null, url)
+    sms.reduce ((acc,m) -> acc push m), menu.sousMenus
+    menu
+
+
+  menu: (title, url= '') ->
+    child = new Menu(title,@, url)
     @sousMenus.push child
     child
 
+  mappings: -> @sousMenus.reduce {url:'', title:''}
 
 
   breadCrumb: (url)->
@@ -20,7 +28,7 @@ class MenuBuilder
   asHtml: -> @sousMenus.reduce ((acc, m) -> acc + m.asHtml()), ""
 
 class Menu extends MenuItem
-  constructor: (@title, @parent) ->
+  constructor: (@title, @parent, @url = '') ->
     super(@title)
 
   subM: (url, title) ->
@@ -29,6 +37,7 @@ class Menu extends MenuItem
 
   menu: (title) ->
     @parent.menu(title)
+
 
   asHtml: ->
     smenus = @sousMenus.reduce ((acc, m) -> acc + m.asHtml() + "\n"), ""
@@ -40,6 +49,8 @@ class SMenu extends MenuItem
     super(@title)
 
   asHtml: -> "<li><a href='/#{@url}/'>#{@title}</li>"
+
+#  mapping: -> @url , @title
 
 module.exports = MenuBuilder
 

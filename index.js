@@ -19,11 +19,30 @@
       this.sousMenus = [];
     }
 
-    MenuBuilder.prototype.menu = function(title) {
+    MenuBuilder.m = function(title, url, sms) {
+      var menu;
+      menu = new Menu(title, null, url);
+      sms.reduce((function(acc, m) {
+        return acc(push(m));
+      }), menu.sousMenus);
+      return menu;
+    };
+
+    MenuBuilder.prototype.menu = function(title, url) {
       var child;
-      child = new Menu(title, this);
+      if (url == null) {
+        url = '';
+      }
+      child = new Menu(title, this, url);
       this.sousMenus.push(child);
       return child;
+    };
+
+    MenuBuilder.prototype.mappings = function() {
+      return this.sousMenus.reduce({
+        url: '',
+        title: ''
+      });
     };
 
     MenuBuilder.prototype.breadCrumb = function(url) {
@@ -43,9 +62,10 @@
   Menu = (function(_super) {
     __extends(Menu, _super);
 
-    function Menu(title, parent) {
+    function Menu(title, parent, url) {
       this.title = title;
       this.parent = parent;
+      this.url = url != null ? url : '';
       Menu.__super__.constructor.call(this, this.title);
     }
 

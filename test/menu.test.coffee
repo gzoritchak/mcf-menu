@@ -1,11 +1,11 @@
 # test/calculator.test.coffee
 
-Menu = require '../index'
+MenuBuilder = require '../index'
 
 exports.MenuTest =
 
   'Test Bread crumb': (test) ->
-    root = new Menu()
+    root = new MenuBuilder()
     root
       .menu 'Santé'
         .subM('comparaison-cmu-lamal', 'CMU ou Lamal')
@@ -17,7 +17,7 @@ exports.MenuTest =
 
 
   'Test générer menu': (test) ->
-    root = new Menu()
+    root = new MenuBuilder()
     root
       .menu 'Santé'
         .subM 'comparaison-cmu-lamal' , 'CMU ou Lamal'
@@ -26,4 +26,19 @@ exports.MenuTest =
     html = root.asHtml()
     console.log html
     test.done()
+
+  'Mapping des pages': (test) ->
+    mb = new MenuBuilder()
+    mb
+      .menu 'contact', 'Contact'
+
+    mappings = mb.mappings()
+    test.equals( {url:'contact', title:'Contact'}, mappings)
+    test.done()
+
+  'Construction menu': (test) ->
+      menu = m('H1', '/',[])
+      console.log menu
+      test.done()
+
 
